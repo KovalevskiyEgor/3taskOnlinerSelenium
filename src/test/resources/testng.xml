@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite1">
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg" />
+    </listeners>
+
+    <test name="test1">
+        <parameter name="mainCategory" value="Электроника" />
+        <parameter name="category" value="Телевидение и видео" />
+        <parameter name="subcategory" value="Телевизоры" />
+        <parameter name="screenResolution" value="1920x1080 (Full HD)" />
+        <parameter name="priceLimit" value="2000" />
+        <parameter name="screenDiagonalFrom" value="40" />
+        <parameter name="screenDiagonalTo" value="50" />
+
+        <classes>
+            <class name="test.OnlinerTest" />
+        </classes>
+    </test>
+</suite>
