@@ -6,8 +6,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
 import org.openqa.selenium.support.ui.*;
 import org.w3c.dom.*;
+import utils.PropertyReader;
 import utils.Screenshoter;
 import javax.xml.parsers.*;
+import java.time.Duration;
 import java.util.*;
 
 @Log
@@ -72,14 +74,21 @@ public class ItemsPage extends BasePage{
         laptopList = driver.findElements(By.xpath("//div[contains(@class,\"catalog-form__description_huge-additional\")]//span[not(@class)]/.."));
 
         scrollToElement(driver.findElement(By.xpath("//div[contains(text(),\"Сначала популярные\")]")));
+        Set<String> oldWindowHandles = driver.getWindowHandles();
         for(WebElement element: laptopList){
             String href = element.getAttribute("href");
             js.executeScript("window.open('" + href + "','_blank');");
-            try {
-                Thread.sleep(600);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+
+            Set<String> newWindowHandles = driver.getWindowHandles();
+            newWindowHandles.removeAll(oldWindowHandles);
+            driver.switchTo().window(newWindowHandles.iterator().next());
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(driver1 -> js.executeScript("return document.readyState").equals("complete"));
+            oldWindowHandles = driver.getWindowHandles();
+
+            driver.switchTo().window(mainWindow);
+
         }
     }
 
